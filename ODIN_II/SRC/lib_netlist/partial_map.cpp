@@ -41,6 +41,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "vtr_memory.h"
 #include "vtr_util.h"
 
+#include "LFSR.h"
+
 void depth_first_traversal_to_partial_map(short marker_value, netlist_t *netlist);
 void depth_first_traverse_parital_map(nnode_t *node, int traverse_mark_number, netlist_t *netlist);
 
@@ -298,9 +300,12 @@ void partial_map_node(nnode_t *node, short traverse_number, netlist_t *netlist)
 		case PAD_NODE:
 			/* some nodes already in the form that is mapable */
 			break;
+        case DIVIDE:
+            printf("Found an LFSR denoted by a division symbol.\n");
+			instantiate_lfsr(node, traverse_number, netlist);
+            break;
 		case CASE_EQUAL:
 		case CASE_NOT_EQUAL:
-		case DIVIDE:
 		case MODULO:
 		default:
 			error_message(NETLIST_ERROR, 0, -1, "Partial map: node should have been converted to softer version.");

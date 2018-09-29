@@ -3849,7 +3849,11 @@ signal_list_t *create_operation_node(ast_node_t *op, signal_list_t **input_lists
 			break;
 		}
 		case DIVIDE: // /
-			error_message(NETLIST_ERROR,  op->line_number, op->file_number, "Divide operation not supported by Odin\n");
+			// Output same bit width as first input which is the seed
+			output_port_width = input_lists[0]->count;
+			// The multiplication one was -2 which makes no sense to me but the multiplication
+			//  operator works with -2 as the input port width so lets see if it works for me.
+			input_port_width = -2;
 			break;
 		case MODULO: // %
 			error_message(NETLIST_ERROR,  op->line_number, op->file_number, "Modulo operation not supported by Odin\n");
